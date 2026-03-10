@@ -1,0 +1,7 @@
+/target
+.nomograph/
+.fastembed_cache/
+memory/
+AGENTS.md
+opencode.json
+.DS_Store

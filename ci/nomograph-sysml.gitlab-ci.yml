@@ -1,0 +1,87 @@
+# nomograph-sysml GitLab CI/CD Template
+#
+# Include in your project's .gitlab-ci.yml:
+#
+#   include:
+#     - component: gitlab.com/nomograph/sysml/ci/nomograph-sysml.gitlab-ci.yml
+#
+# Or copy this file into your repository and include it locally:
+#
+#   include:
+#     - local: .gitlab/ci/nomograph-sysml.yml
+#
+# Variables:
+#   NOMOGRAPH_MODEL_DIR: Directory containing .sysml files (default: ".")
+#   NOMOGRAPH_INDEX_PATH: Path for the index file (default: ".nomograph/index.json")
+#   NOMOGRAPH_CHECKS: Check types to run (default: "all")
+#   NOMOGRAPH_FAIL_ON_FINDINGS: Exit 1 if checks find issues (default: "false")
+#   NOMOGRAPH_BADGE: Generate SVG badge artifact (default: "true")
+#   NOMOGRAPH_BINARY: Path to nomograph-sysml binary (default: "nomograph-sysml")
+
+variables:
+  NOMOGRAPH_MODEL_DIR: "."
+  NOMOGRAPH_INDEX_PATH: ".nomograph/index.json"
+  NOMOGRAPH_CHECKS: "all"
+  NOMOGRAPH_FAIL_ON_FINDINGS: "false"
+  NOMOGRAPH_BADGE: "true"
+  NOMOGRAPH_BINARY: "nomograph-sysml"
+
+stages:
+  - validate
+  - analyze
+
+.nomograph-base:
+  image: rust:latest
+  before_script:
+    - command -v ${NOMOGRAPH_BINARY} >/dev/null 2>&1 || cargo install nomograph-sysml
+
+sysml-validate:
+  extends: .nomograph-base
+  stage: validate
+  script:
+    - |
+      ERRORS=0
+      for f in $(find ${NOMOGRAPH_MODEL_DIR} -name '*.sysml' -type f); do
+        RESULT=$(${NOMOGRAPH_BINARY} validate "$f" 2>/dev/null)
+        VALID=$(echo "$RESULT" | jq -r '.valid')
+        if [ "$VALID" != "true" ]; then
+          echo "INVALID: $f" >&2
+          echo "$RESULT" | jq '.diagnostics[]' >&2
+          ERRORS=$((ERRORS + 1))
+        fi
+      done
+      if [ "$ERRORS" -gt 0 ]; then
+        echo "error: $ERRORS file(s) have syntax errors" >&2
+        exit 1
+      fi
+      echo "All .sysml files are syntactically valid"
+  rules:
+    - changes:
+        - "**/*.sysml"
+
+sysml-check:
+  extends: .nomograph-base
+  stage: analyze
+  script:
+    - ${NOMOGRAPH_BINARY} index ${NOMOGRAPH_MODEL_DIR} --output ${NOMOGRAPH_INDEX_PATH}
+    - |
+      FAIL_FLAG=""
+      if [ "${NOMOGRAPH_FAIL_ON_FINDINGS}" = "true" ]; then
+        FAIL_FLAG="--fail-on-findings"
+      fi
+      ${NOMOGRAPH_BINARY} check ${NOMOGRAPH_CHECKS} --index ${NOMOGRAPH_INDEX_PATH} --detail ${FAIL_FLAG}
+    - ${NOMOGRAPH_BINARY} stat --index ${NOMOGRAPH_INDEX_PATH}
+    - |
+      if [ "${NOMOGRAPH_BADGE}" = "true" ]; then
+        ${NOMOGRAPH_BINARY} stat --index ${NOMOGRAPH_INDEX_PATH} --badge > model-health.svg
+      fi
+  artifacts:
+    paths:
+      - ${NOMOGRAPH_INDEX_PATH}
+      - model-health.svg
+    reports:
+      dotenv: nomograph.env
+    when: always
+  rules:
+    - changes:
+        - "**/*.sysml"
