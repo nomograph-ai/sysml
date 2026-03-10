@@ -1,0 +1,58 @@
+# nomograph-sysml MR Diff Template
+#
+# Compares model changes between base branch and head branch.
+# Intended for merge request pipelines only.
+#
+# Include in your project's .gitlab-ci.yml:
+#
+#   include:
+#     - local: .gitlab/ci/nomograph-mr-diff.yml
+#
+# Variables:
+#   NOMOGRAPH_MODEL_DIR: Directory containing .sysml files (default: ".")
+#   NOMOGRAPH_BINARY: Path to nomograph-sysml binary (default: "nomograph-sysml")
+#   NOMOGRAPH_DIFF_COMPACT: Use compact output (default: "true")
+
+variables:
+  NOMOGRAPH_MODEL_DIR: "."
+  NOMOGRAPH_BINARY: "nomograph-sysml"
+  NOMOGRAPH_DIFF_COMPACT: "true"
+
+.nomograph-base:
+  image: rust:latest
+  before_script:
+    - command -v ${NOMOGRAPH_BINARY} >/dev/null 2>&1 || cargo install nomograph-sysml
+
+sysml-mr-diff:
+  extends: .nomograph-base
+  stage: analyze
+  script:
+    - echo "Indexing head branch (${CI_COMMIT_SHA})..."
+    - ${NOMOGRAPH_BINARY} index ${NOMOGRAPH_MODEL_DIR} --output /tmp/head-index.json
+    - |
+      echo "Indexing base branch (${CI_MERGE_REQUEST_TARGET_BRANCH_NAME})..."
+      git fetch origin ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
+      git checkout origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} -- ${NOMOGRAPH_MODEL_DIR} 2>/dev/null || true
+      ${NOMOGRAPH_BINARY} index ${NOMOGRAPH_MODEL_DIR} --output /tmp/base-index.json
+      git checkout ${CI_COMMIT_SHA} -- ${NOMOGRAPH_MODEL_DIR}
+    - |
+      COMPACT_FLAG=""
+      if [ "${NOMOGRAPH_DIFF_COMPACT}" = "true" ]; then
+        COMPACT_FLAG="--compact"
+      fi
+      echo "=== Model Diff ===" >&2
+      ${NOMOGRAPH_BINARY} diff /tmp/base-index.json /tmp/head-index.json ${COMPACT_FLAG} | tee model-diff.json
+    - |
+      TOTAL=$(jq -r '.summary.total_changes // 0' model-diff.json)
+      echo "Total changes: ${TOTAL}"
+      if [ "${TOTAL}" -eq 0 ]; then
+        echo "No model changes detected."
+      fi
+  artifacts:
+    paths:
+      - model-diff.json
+    when: always
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - "**/*.sysml"

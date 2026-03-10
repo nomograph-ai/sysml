@@ -1,0 +1,28 @@
+[package]
+name = "sysml-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "nomograph-sysml"
+path = "src/main.rs"
+
+[features]
+default = []
+mcp = ["dep:rmcp", "dep:schemars", "dep:tokio", "dep:serde"]
+vectors = ["sysml-core/vector"]
+
+[dependencies]
+nomograph-core = { workspace = true }
+sysml-core = { workspace = true }
+clap = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+rmcp = { workspace = true, optional = true }
+schemars = { workspace = true, optional = true }
+tokio = { workspace = true, optional = true }
+serde = { workspace = true, optional = true }
