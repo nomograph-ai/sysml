@@ -1,7 +1,9 @@
 # nomograph-sysml
 
-[![Nomograph Labs](https://img.shields.io/badge/Nomograph_Labs-1a1a1a?style=flat&labelColor=f2f0eb&color=1a1a1a)](https://nomograph.ai)
+[![pipeline status](https://gitlab.com/nomograph/sysml/badges/main/pipeline.svg)](https://gitlab.com/nomograph/sysml/-/pipelines)
+[![crates.io](https://img.shields.io/crates/v/sysml-cli?logo=rust&label=sysml-cli)](https://crates.io/crates/sysml-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-1a1a1a.svg)](LICENSE)
+[![Nomograph Labs](https://img.shields.io/badge/Nomograph_Labs-1a1a1a?style=flat&labelColor=f2f0eb&color=1a1a1a)](https://nomograph.ai)
 
 CLI-native knowledge graph toolkit for SysML v2. Single binary, dual mode
 (CLI + MCP server). Part of [Nomograph Labs](https://nomograph.ai).
@@ -14,13 +16,19 @@ for parsing and inspired by GitLab's [Global Knowledge Graph](https://handbook.g
 ## Install
 
 ```bash
-cargo install --path crates/sysml-cli
+cargo install sysml-cli
 ```
 
 With MCP server support:
 
 ```bash
-cargo install --path crates/sysml-cli --features mcp
+cargo install sysml-cli --features mcp
+```
+
+From source:
+
+```bash
+cargo install --path crates/sysml-cli
 ```
 
 ## Quick Start
@@ -126,7 +134,7 @@ Generates a shields.io-style SVG badge showing completeness percentage and eleme
 
 ```bash
 cargo build --workspace
-cargo test --workspace           # 123 tests
+cargo test --workspace           # 116 tests
 cargo clippy --workspace         # must be clean
 cargo fmt --all
 ```
