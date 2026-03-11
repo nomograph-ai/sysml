@@ -1,9 +1,13 @@
 [package]
 name = "sysml-core"
+description = "SysML v2 knowledge graph library — parser, graph builder, queries, and rendering"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+authors.workspace = true
+keywords.workspace = true
 
 [features]
 default = []
