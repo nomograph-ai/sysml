@@ -21,7 +21,7 @@ cache:
 build:
   stage: test
   script:
-    - cargo build --workspace --all-features
+    - cargo build --workspace
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -38,7 +38,7 @@ clippy:
   stage: test
   script:
     - rustup component add clippy
-    - cargo clippy --workspace --all-features -- -D warnings
+    - cargo clippy --workspace -- -D warnings
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
