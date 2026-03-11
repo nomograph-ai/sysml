@@ -1,9 +1,9 @@
 # nomograph-sysml
 
+[![Nomograph Labs](https://img.shields.io/badge/Nomograph_Labs-1a1a1a?style=flat&labelColor=f2f0eb&color=1a1a1a)](https://nomograph.ai)
+[![License: MIT](https://img.shields.io/badge/License-MIT-1a1a1a.svg)](LICENSE)
 [![pipeline status](https://gitlab.com/nomograph/sysml/badges/main/pipeline.svg)](https://gitlab.com/nomograph/sysml/-/pipelines)
 [![crates.io](https://img.shields.io/crates/v/sysml-cli?logo=rust&label=sysml-cli)](https://crates.io/crates/sysml-cli)
-[![License: MIT](https://img.shields.io/badge/License-MIT-1a1a1a.svg)](LICENSE)
-[![Nomograph Labs](https://img.shields.io/badge/Nomograph_Labs-1a1a1a?style=flat&labelColor=f2f0eb&color=1a1a1a)](https://nomograph.ai)
 
 CLI-native knowledge graph toolkit for SysML v2. Single binary, dual mode
 (CLI + MCP server). Part of [Nomograph Labs](https://nomograph.ai).
