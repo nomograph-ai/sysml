@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Outer fill -->
+  <rect x="0" y="0" width="256" height="256" fill="#faf6ed" rx="0"/>
+  <!-- Inset frame -->
+  <rect x="20" y="20" width="216" height="216" fill="none" stroke="#2c2417" stroke-width="4" rx="0"/>
+  <!-- Header bar -->
+  <rect x="28" y="28" width="200" height="36" fill="#2c2417" rx="0"/>
+  <text x="128" y="53" text-anchor="middle" font-size="20" fill="#faf6ed" font-weight="bold" font-family="'Courier New', monospace">sysml</text>
+
+  <!-- Schematic: SysML box with arrows to terminal prompt -->
+  <!-- SysML document box -->
+  <rect x="55" y="95" width="60" height="50" fill="none" stroke="#2c2417" stroke-width="2" rx="0"/>
+  <text x="85" y="116" text-anchor="middle" font-size="10" fill="#2c2417" font-family="'Courier New', monospace" font-weight="bold">SysML</text>
+  <line x1="65" y1="122" x2="105" y2="122" stroke="#c4b99a" stroke-width="1"/>
+  <text x="85" y="136" text-anchor="middle" font-size="8" fill="#6b5d4f" font-family="'Courier New', monospace">.sysml</text>
+
+  <!-- Arrow from SysML to terminal -->
+  <line x1="115" y1="120" x2="138" y2="120" stroke="#2c2417" stroke-width="1.5"/>
+  <polygon points="138,116 146,120 138,124" fill="#2c2417"/>
+
+  <!-- Terminal prompt box -->
+  <rect x="146" y="95" width="60" height="50" fill="none" stroke="#2c2417" stroke-width="2" rx="0"/>
+  <rect x="146" y="95" width="60" height="14" fill="#2c2417" rx="0"/>
+  <text x="176" y="105" text-anchor="middle" font-size="7" fill="#faf6ed" font-family="'Courier New', monospace">CLI</text>
+  <text x="155" y="125" font-size="9" fill="#6b5d4f" font-family="'Courier New', monospace">$_</text>
+  <text x="155" y="138" font-size="8" fill="#c4b99a" font-family="'Courier New', monospace">query</text>
+
+  <!-- Output arrow down from terminal -->
+  <line x1="176" y1="145" x2="176" y2="168" stroke="#2c2417" stroke-width="1.5"/>
+  <polygon points="172,168 176,176 180,168" fill="#2c2417"/>
+
+  <!-- Output box -->
+  <rect x="100" y="178" width="80" height="36" fill="none" stroke="#2c2417" stroke-width="2" rx="0"/>
+  <text x="140" y="195" text-anchor="middle" font-size="9" fill="#2c2417" font-family="'Courier New', monospace" font-weight="bold">{ JSON }</text>
+  <text x="140" y="208" text-anchor="middle" font-size="7" fill="#6b5d4f" font-family="'Courier New', monospace">structured</text>
+
+  <!-- Base line -->
+  <line x1="60" y1="228" x2="196" y2="228" stroke="#c4b99a" stroke-width="2"/>
+</svg>
