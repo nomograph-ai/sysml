@@ -7,6 +7,8 @@ variables:
 
 default:
   image: rust:1.85
+  tags:
+    - storr
 
 cache:
   key: rust-${CI_COMMIT_REF_SLUG}
