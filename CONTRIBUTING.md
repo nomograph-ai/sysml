@@ -69,6 +69,11 @@ These require manual review when making changes:
 
 ## Test Fixtures
 
-The Eve Mining Frigate model in `tests/fixtures/eve/` (19 files, 798 elements, 1515 relationships) is the primary corpus. Coverage tests parse this corpus and verify that every element kind and relationship kind found is known to the vocabulary.
+Coverage tests parse all fixture corpora and verify that every element kind and relationship kind found is known to the vocabulary.
 
-If the Eve model is extended with new SysML v2 constructs, coverage tests will automatically flag any that the walker doesn't handle.
+| Corpus | Path | Files | Description |
+|--------|------|-------|-------------|
+| Eve Mining Frigate | `tests/fixtures/eve/` | 19 | LLM-generated EVE Online mining frigate model (Hugo Ormo) |
+| Apollo 11 | `tests/fixtures/apollo-11/` | 28 | Airbus CoSMA framework -- 5 architectural layers (MPL-2.0) |
+
+If either corpus is extended with new SysML v2 constructs, coverage tests will automatically flag any that the walker doesn't handle.

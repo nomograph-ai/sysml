@@ -179,6 +179,9 @@ pub(crate) const ELEMENT_KIND_NAMES: &[&str] = &[
     "end_usage",
     "parameter_usage",
     "generic_usage",
+    "feature_usage",
+    "timeslice_usage",
+    "snapshot_usage",
     "package_definition",
     "library_package",
 ];
@@ -365,6 +368,8 @@ pub fn classify_layer(kind: &str) -> Option<RflpLayer> {
         | "item_flow_usage"
         | "actor_usage"
         | "event_occurrence_usage"
+        | "timeslice_usage"
+        | "snapshot_usage"
         | "exhibit_usage" => Some(RflpLayer::Functional),
         "part_definition"
         | "part_usage"

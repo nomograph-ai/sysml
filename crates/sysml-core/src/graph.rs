@@ -1066,6 +1066,33 @@ pub(crate) mod tests {
         results
     }
 
+    fn fixtures_root() -> PathBuf {
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures")
+    }
+
+    fn apollo11_dir() -> PathBuf {
+        fixtures_root().join("apollo-11")
+    }
+
+    pub(crate) fn parse_all_apollo11() -> Vec<ParseResult<SysmlElement, SysmlRelationship>> {
+        let parser = crate::parser::SysmlParser::new();
+        let mut results = Vec::new();
+        for entry in walkdir(apollo11_dir()) {
+            if entry.extension().and_then(|e| e.to_str()) == Some("sysml") {
+                let source = std::fs::read_to_string(&entry).expect("read fixture");
+                let result = parser.parse(&source, &entry).expect("parse fixture");
+                results.push(result);
+            }
+        }
+        results
+    }
+
+    pub(crate) fn parse_all_fixtures() -> Vec<ParseResult<SysmlElement, SysmlRelationship>> {
+        let mut results = parse_all_eve();
+        results.extend(parse_all_apollo11());
+        results
+    }
+
     fn walkdir(dir: PathBuf) -> Vec<PathBuf> {
         let mut files = Vec::new();
         if let Ok(entries) = std::fs::read_dir(&dir) {
@@ -1089,6 +1116,16 @@ pub(crate) mod tests {
         assert!(graph.element_count() > 0, "should have elements");
         assert!(graph.relationship_count() > 0, "should have relationships");
         assert_eq!(graph.file_count(), 19);
+    }
+
+    #[test]
+    fn test_index_apollo11_model() {
+        let results = parse_all_apollo11();
+        let mut graph = SysmlGraph::new();
+        graph.index(results).expect("index should succeed");
+        assert!(graph.element_count() > 0, "should have elements");
+        assert!(graph.relationship_count() > 0, "should have relationships");
+        assert_eq!(graph.file_count(), 28);
     }
 
     #[test]
@@ -1861,7 +1898,7 @@ pub(crate) mod tests {
 mod coverage_tests {
     use std::collections::HashSet;
 
-    use super::tests::parse_all_eve;
+    use super::tests::parse_all_fixtures;
     use super::*;
     use crate::vocabulary::{
         classify_layer, ELEMENT_KIND_NAMES, RELATIONSHIP_KIND_NAMES, STRUCTURAL_RELATIONSHIP_KINDS,
@@ -1932,6 +1969,7 @@ mod coverage_tests {
         "view_usage",
         "viewpoint_definition",
         "generic_usage",
+        "feature_usage",
     ];
 
     #[test]
@@ -1964,7 +2002,7 @@ mod coverage_tests {
 
     #[test]
     fn test_parsed_element_kinds_in_vocabulary() {
-        let results = parse_all_eve();
+        let results = parse_all_fixtures();
         let mut graph = SysmlGraph::new();
         graph.index(results).unwrap();
         let known: HashSet<&str> = ELEMENT_KIND_NAMES.iter().copied().collect();
@@ -1975,14 +2013,14 @@ mod coverage_tests {
             .collect();
         assert!(
             missing.is_empty(),
-            "Eve corpus contains element kinds not in ELEMENT_KIND_NAMES: {:?}",
+            "Corpus contains element kinds not in ELEMENT_KIND_NAMES: {:?}",
             missing
         );
     }
 
     #[test]
     fn test_parsed_relationship_kinds_in_vocabulary() {
-        let results = parse_all_eve();
+        let results = parse_all_fixtures();
         let mut graph = SysmlGraph::new();
         graph.index(results).unwrap();
         let known: HashSet<&str> = RELATIONSHIP_KIND_NAMES.iter().copied().collect();
@@ -1994,7 +2032,7 @@ mod coverage_tests {
         for kind in &parsed_kinds {
             assert!(
                 known.contains(kind),
-                "Eve corpus contains relationship kind '{kind}' not in RELATIONSHIP_KIND_NAMES"
+                "Corpus contains relationship kind '{kind}' not in RELATIONSHIP_KIND_NAMES"
             );
         }
     }
