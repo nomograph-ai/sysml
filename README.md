@@ -74,8 +74,8 @@ nomograph-sysml --mcp
 | `stat` | Model health dashboard |
 | `plan` | Decompose a question into executable CLI commands |
 | `diff` | Compare two knowledge graph indexes |
-| `scaffold` | Generate SysML v2 scaffold text (8 element kinds) |
-| `skill` | Generate agent skill file (~300 tokens) |
+| `scaffold` | Generate SysML v2 scaffold text |
+| `skill` | Generate agent skill file |
 
 All commands output JSON to stdout. Use `--format pretty` for indented output.
 
@@ -136,7 +136,7 @@ Generates a shields.io-style SVG badge showing completeness percentage and eleme
 
 ```bash
 cargo build --workspace
-cargo test --workspace           # 116 tests
+cargo test --workspace
 cargo clippy --workspace         # must be clean
 cargo fmt --all
 ```
@@ -149,7 +149,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for grammar sync procedures and coverage 
 
 ## License
 
-MIT — see [LICENSE](LICENSE)
+MIT -- see [LICENSE](LICENSE)
 
 ## Citation
 
