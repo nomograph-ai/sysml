@@ -1,6 +1,6 @@
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - component: gitlab.com/nomograph/pipeline/rust-cli@v2.4.2
+  - component: gitlab.com/nomograph/pipeline/rust-cli@v2.4.4
     inputs:
       binary_name: sysml
       project_description: "CLI-native knowledge graph toolkit for SysML v2."
