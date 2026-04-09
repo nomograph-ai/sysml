@@ -4,7 +4,7 @@
 
 [![pipeline](https://gitlab.com/nomograph/sysml/badges/main/pipeline.svg)](https://gitlab.com/nomograph/sysml/-/pipelines)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-![built with GitLab](https://img.shields.io/badge/built_with-GitLab-FC6D26?logo=gitlab)
+[![built with GitLab](https://img.shields.io/badge/built_with-GitLab-FC6D26?logo=gitlab)](https://gitlab.com/nomograph/sysml)
 [![crates.io](https://img.shields.io/crates/v/sysml-cli?logo=rust&label=sysml-cli)](https://crates.io/crates/sysml-cli)
 
 CLI-native knowledge graph toolkit for SysML v2. Single binary, dual mode
@@ -16,6 +16,10 @@ Built on [tree-sitter-sysml](https://gitlab.com/nomograph/tree-sitter-sysml)
 for parsing and inspired by GitLab's [Global Knowledge Graph](https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/gkg/) architecture.
 
 ## Install
+
+The crate is published as `sysml-cli`. The installed binary is called `nomograph-sysml`.
+
+Requires Rust 1.85 or later.
 
 ```bash
 cargo install sysml-cli
@@ -41,6 +45,7 @@ nomograph-sysml index path/to/model/
 
 # Search for elements
 nomograph-sysml search "ShieldModule"
+# => {"total_candidates":42,"results_returned":1,"results":[{"qualified_name":"ShieldModule","kind":"PartDefinition","score":1.0,...}]}
 
 # Trace relationships from an element
 nomograph-sysml trace ShieldModule --hops 3
