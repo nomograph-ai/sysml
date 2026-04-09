@@ -1,0 +1,32 @@
+# cargo-deny v0.19+ configuration
+# https://embarkstudios.github.io/cargo-deny/
+
+[graph]
+targets = [
+    "aarch64-apple-darwin",
+    "x86_64-unknown-linux-gnu",
+]
+
+[advisories]
+# Deny any crate with a known vulnerability
+db-path = "~/.cargo/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
+
+[licenses]
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "Zlib",
+    "OpenSSL",
+    "MPL-2.0",
+    "CDLA-Permissive-2.0",
+]
+
+[bans]
+multiple-versions = "warn"
+wildcards = "allow"
