@@ -1,11 +1,11 @@
 ![hero](hero.svg)
 
-# nomograph-sysml
+# sysml
 
 [![pipeline](https://gitlab.com/nomograph/sysml/badges/main/pipeline.svg)](https://gitlab.com/nomograph/sysml/-/pipelines)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![built with GitLab](https://img.shields.io/badge/built_with-GitLab-FC6D26?logo=gitlab)](https://gitlab.com/nomograph/sysml)
-[![crates.io](https://img.shields.io/crates/v/sysml-cli?logo=rust&label=sysml-cli)](https://crates.io/crates/sysml-cli)
+[![crates.io](https://img.shields.io/crates/v/nomograph-sysml?logo=rust&label=nomograph-sysml)](https://crates.io/crates/nomograph-sysml)
 
 CLI-native knowledge graph toolkit for SysML v2. Single binary, dual mode
 (CLI + MCP server). Part of [Nomograph Labs](https://nomograph.ai).
@@ -17,50 +17,48 @@ for parsing and inspired by GitLab's [Global Knowledge Graph](https://handbook.g
 
 ## Install
 
-The crate is published as `sysml-cli`. The installed binary is called `nomograph-sysml`.
-
 Requires Rust 1.85 or later.
 
 ```bash
-cargo install sysml-cli
+cargo install nomograph-sysml
 ```
 
 With MCP server support:
 
 ```bash
-cargo install sysml-cli --features mcp
+cargo install nomograph-sysml --features mcp
 ```
 
 From source:
 
 ```bash
-cargo install --path crates/sysml-cli
+cargo install --path crates/sysml-cli  # binary installs as 'sysml'
 ```
 
 ## Quick Start
 
 ```bash
 # Build knowledge graph from SysML v2 files
-nomograph-sysml index path/to/model/
+sysml index path/to/model/
 
 # Search for elements
-nomograph-sysml search "ShieldModule"
+sysml search "ShieldModule"
 # => {"total_candidates":42,"results_returned":1,"results":[{"qualified_name":"ShieldModule","kind":"PartDefinition","score":1.0,...}]}
 
 # Trace relationships from an element
-nomograph-sysml trace ShieldModule --hops 3
+sysml trace ShieldModule --hops 3
 
 # Check model completeness
-nomograph-sysml check all --detail
+sysml check all --detail
 
 # Query specific relationship types
-nomograph-sysml query --source-name "ShieldModule" --rel satisfy
+sysml query --source-name "ShieldModule" --rel satisfy
 
 # Decompose a question into executable steps
-nomograph-sysml plan "Does ShieldModule satisfy MFRQ01?" --execute
+sysml plan "Does ShieldModule satisfy MFRQ01?" --execute
 
 # Start MCP server (requires --features mcp)
-nomograph-sysml --mcp
+sysml --mcp
 ```
 
 ## Commands
@@ -100,7 +98,7 @@ Domain logic lives in `sysml-core`. CLI and MCP are thin transport wrappers that
 
 ## GitLab CI/CD Integration
 
-nomograph-sysml ships CI templates in `ci/` for model validation gates and MR diff.
+sysml ships CI templates in `ci/` for model validation gates and MR diff.
 
 ### Model Validation Gate
 
@@ -132,7 +130,7 @@ Runs on merge request pipelines when `.sysml` files change. Compares the base br
 ### Health Badge
 
 ```bash
-nomograph-sysml stat --badge > model-health.svg
+sysml stat --badge > model-health.svg
 ```
 
 Generates a shields.io-style SVG badge showing completeness percentage and element/relationship counts. Colors: green (100%), yellow (>=80%), orange (>=50%), red (<50%).

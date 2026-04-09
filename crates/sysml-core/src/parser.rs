@@ -1,7 +1,7 @@
 use std::path::Path;
 
-use nomograph_core::traits::Parser;
-use nomograph_core::types::{Diagnostic, ParseResult};
+use crate::core_traits::Parser;
+use crate::core_types::{Diagnostic, ParseResult};
 
 use crate::element::SysmlElement;
 use crate::relationship::SysmlRelationship;
@@ -24,7 +24,7 @@ impl Default for SysmlParser {
 impl Parser for SysmlParser {
     type Elem = SysmlElement;
     type Rel = SysmlRelationship;
-    type Error = nomograph_core::CoreError;
+    type Error = crate::core_error::CoreError;
 
     fn parse(
         &self,
@@ -34,11 +34,11 @@ impl Parser for SysmlParser {
         let mut ts_parser = tree_sitter::Parser::new();
         ts_parser
             .set_language(&tree_sitter_sysml::LANGUAGE.into())
-            .map_err(|e| nomograph_core::CoreError::Parse(e.to_string()))?;
+            .map_err(|e| crate::core_error::CoreError::Parse(e.to_string()))?;
 
         let tree = ts_parser
             .parse(source, None)
-            .ok_or_else(|| nomograph_core::CoreError::Parse("Parser returned None".to_string()))?;
+            .ok_or_else(|| crate::core_error::CoreError::Parse("Parser returned None".to_string()))?;
 
         let root = tree.root_node();
 
@@ -62,9 +62,9 @@ impl Parser for SysmlParser {
             .is_err()
         {
             return vec![Diagnostic {
-                severity: nomograph_core::types::Severity::Error,
+                severity: crate::core_types::Severity::Error,
                 message: "Failed to initialize parser".to_string(),
-                span: nomograph_core::types::Span {
+                span: crate::core_types::Span {
                     start_line: 0,
                     start_col: 0,
                     end_line: 0,
@@ -75,9 +75,9 @@ impl Parser for SysmlParser {
 
         let Some(tree) = ts_parser.parse(source, None) else {
             return vec![Diagnostic {
-                severity: nomograph_core::types::Severity::Error,
+                severity: crate::core_types::Severity::Error,
                 message: "Parser returned None".to_string(),
-                span: nomograph_core::types::Span {
+                span: crate::core_types::Span {
                     start_line: 0,
                     start_col: 0,
                     end_line: 0,
@@ -95,7 +95,7 @@ impl Parser for SysmlParser {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nomograph_core::types::Severity;
+    use crate::core_types::Severity;
     use std::path::PathBuf;
 
     fn test_path() -> PathBuf {

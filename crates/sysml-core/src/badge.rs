@@ -1,6 +1,6 @@
 use crate::SysmlGraph;
-use nomograph_core::traits::KnowledgeGraph;
-use nomograph_core::types::CheckType;
+use crate::core_traits::KnowledgeGraph;
+use crate::core_types::CheckType;
 
 pub struct BadgeData {
     pub label: String,
@@ -182,7 +182,7 @@ mod tests {
 
     #[test]
     fn test_badge_data_from_eve_model() {
-        use nomograph_core::traits::KnowledgeGraph;
+        use crate::core_traits::KnowledgeGraph;
         let results = crate::graph::tests::parse_all_eve();
         let mut graph = crate::SysmlGraph::new();
         graph.index(results).unwrap();

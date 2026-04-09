@@ -1,9 +1,9 @@
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::path::{Path, PathBuf};
 
-use nomograph_core::error::{CoreError, IndexError};
-use nomograph_core::traits::KnowledgeGraph;
-use nomograph_core::types::{
+use crate::core_error::{CoreError, IndexError};
+use crate::core_traits::KnowledgeGraph;
+use crate::core_types::{
     CheckType, DetailLevel, Direction, Finding, ParseResult, Predicate, SearchResult, TraceFormat,
     TraceHop, TraceOptions, TraceResult, Triple,
 };
@@ -1046,7 +1046,7 @@ pub fn find_index(start: &Path) -> Option<PathBuf> {
 #[cfg(test)]
 pub(crate) mod tests {
     use super::*;
-    use nomograph_core::traits::Parser as NomographParser;
+    use crate::core_traits::Parser as NomographParser;
     use std::path::Path;
 
     fn fixture_dir() -> PathBuf {

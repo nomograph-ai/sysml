@@ -7,8 +7,8 @@ use serde::Serialize;
 use crate::element::SysmlElement;
 use crate::graph::SysmlGraph;
 use crate::relationship::SysmlRelationship;
-use nomograph_core::traits::KnowledgeGraph;
-use nomograph_core::types::CheckType;
+use crate::core_traits::KnowledgeGraph;
+use crate::core_types::CheckType;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BuiltinTemplate {
@@ -544,7 +544,7 @@ pub fn parse_render_format(name: &str) -> Option<RenderFormat> {
 mod tests {
     use super::*;
     use crate::parser::SysmlParser;
-    use nomograph_core::traits::Parser as NomographParser;
+    use crate::core_traits::Parser as NomographParser;
     use std::path::PathBuf;
 
     fn fixture_dir() -> PathBuf {

@@ -2,8 +2,8 @@ use std::path::PathBuf;
 use std::process;
 
 use clap::{Parser, Subcommand};
-use nomograph_core::traits::{KnowledgeGraph, Parser as NomographParser};
-use nomograph_core::types::{
+use sysml_core::core_traits::{KnowledgeGraph, Parser as NomographParser};
+use sysml_core::core_types::{
     CheckType, DetailLevel, Direction, Predicate, TraceFormat, TraceOptions,
 };
 use sysml_core::element::RflpLayer;
@@ -427,7 +427,7 @@ fn run_parse(args: ParseArgs, format: &OutputFormat) -> i32 {
         if result
             .diagnostics
             .iter()
-            .any(|d| d.severity == nomograph_core::types::Severity::Error)
+            .any(|d| d.severity == sysml_core::core_types::Severity::Error)
         {
             exit_code = 1;
         }
@@ -494,8 +494,8 @@ fn run_validate(args: ValidateArgs, format: &OutputFormat) -> i32 {
         let diagnostics = parser.validate(&source);
 
         let has_errors = diagnostics.iter().any(|d| {
-            d.severity == nomograph_core::types::Severity::Error
-                || (args.strict && d.severity == nomograph_core::types::Severity::Warning)
+            d.severity == sysml_core::core_types::Severity::Error
+                || (args.strict && d.severity == sysml_core::core_types::Severity::Warning)
         });
 
         if has_errors {

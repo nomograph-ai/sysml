@@ -194,7 +194,7 @@ mod tests {
 
     #[test]
     fn test_scaffold_parseable() {
-        use nomograph_core::traits::Parser;
+        use crate::core_traits::Parser;
         let parser = crate::parser::SysmlParser::new();
         for kind in [
             ScaffoldKind::Requirement,

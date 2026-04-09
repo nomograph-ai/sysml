@@ -1,5 +1,5 @@
 [package]
-name = "sysml-cli"
+name = "nomograph-sysml"
 description = "CLI-native knowledge graph toolkit for SysML v2"
 version.workspace = true
 edition.workspace = true
@@ -8,9 +8,11 @@ license.workspace = true
 repository.workspace = true
 authors.workspace = true
 keywords.workspace = true
+homepage.workspace = true
+readme = "../../README.md"
 
 [[bin]]
-name = "nomograph-sysml"
+name = "sysml"
 path = "src/main.rs"
 
 [features]
@@ -19,7 +21,6 @@ mcp = ["dep:rmcp", "dep:schemars", "dep:tokio", "dep:serde"]
 vectors = ["sysml-core/vector"]
 
 [dependencies]
-nomograph-core = { workspace = true }
 sysml-core = { workspace = true }
 clap = { workspace = true }
 serde_json = { workspace = true }

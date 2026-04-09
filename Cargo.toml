@@ -1,7 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/nomograph-core",
     "crates/sysml-core",
     "crates/sysml-cli",
 ]
@@ -12,7 +11,8 @@ edition = "2021"
 rust-version = "1.85"
 license = "MIT"
 repository = "https://gitlab.com/nomograph/sysml"
-authors = ["Andrew Dunn <andrew@dunn.dev>"]
+authors = ["Andrew Dunn <andunn@gitlab.com>"]
+homepage = "https://gitlab.com/nomograph/sysml"
 keywords = ["sysml", "systems-engineering", "knowledge-graph", "mbse", "tree-sitter"]
 categories = ["command-line-utilities", "parser-implementations"]
 
@@ -32,5 +32,4 @@ schemars = "0.8"
 tokio = { version = "1", features = ["full"] }
 fastembed = { version = "5.12", default-features = false, features = ["hf-hub-native-tls", "ort-download-binaries-native-tls"] }
 hnsw_rs = "0.3"
-nomograph-core = { path = "crates/nomograph-core", version = "0.1.0" }
-sysml-core = { path = "crates/sysml-core", version = "0.1.0" }
+sysml-core = { path = "crates/sysml-core", version = "0.1.0", package = "nomograph-sysml-core" }

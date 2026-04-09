@@ -6,14 +6,13 @@ use rmcp::{schemars, tool, ServerHandler, ServiceExt};
 use serde::Deserialize;
 use tokio::sync::Mutex;
 
-use nomograph_core::traits::KnowledgeGraph;
-use nomograph_core::types::{CheckType, DetailLevel, Direction, Predicate, TraceFormat, TraceOptions};
+use sysml_core::core_traits::{KnowledgeGraph, Parser as NomographParser};
+use sysml_core::core_types::{CheckType, DetailLevel, Direction, Predicate, TraceFormat, TraceOptions};
 use sysml_core::element::RflpLayer;
 use sysml_core::graph::{find_index, SysmlGraph};
 use sysml_core::metamodel;
 use sysml_core::render;
 use sysml_core::SysmlParser;
-use nomograph_core::traits::Parser as NomographParser;
 
 #[derive(Clone)]
 pub struct NomographServer {
@@ -614,10 +613,10 @@ impl NomographServer {
 
             let diagnostics = parser.validate(&source);
             let has_errors = diagnostics.iter().any(|d| {
-                matches!(d.severity, nomograph_core::types::Severity::Error)
+                matches!(d.severity, sysml_core::core_types::Severity::Error)
             });
             let has_warnings = diagnostics.iter().any(|d| {
-                matches!(d.severity, nomograph_core::types::Severity::Warning)
+                matches!(d.severity, sysml_core::core_types::Severity::Warning)
             });
             let valid = !has_errors && (!strict || !has_warnings);
             if !valid {

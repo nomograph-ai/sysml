@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use tree_sitter::Node;
 
-use nomograph_core::types::{Diagnostic, Severity, Span};
+use crate::core_types::{Diagnostic, Severity, Span};
 
 use crate::element::SysmlElement;
 use crate::relationship::SysmlRelationship;

@@ -1,4 +1,4 @@
-use nomograph_core::traits::Vocabulary;
+use crate::core_traits::Vocabulary;
 
 const ELEMENT_KIND_MAP: &[(&str, &[&str])] = &[
     (

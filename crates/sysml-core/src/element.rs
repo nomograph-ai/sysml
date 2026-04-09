@@ -1,5 +1,5 @@
-use nomograph_core::traits::Element;
-use nomograph_core::types::Span;
+use crate::core_traits::Element;
+use crate::core_types::Span;
 use serde::{Deserialize, Serialize};
 use std::any::Any;
 use std::fmt;

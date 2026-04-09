@@ -1,5 +1,5 @@
-use nomograph_core::traits::Relationship;
-use nomograph_core::types::Span;
+use crate::core_traits::Relationship;
+use crate::core_types::Span;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 

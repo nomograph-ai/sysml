@@ -1,8 +1,8 @@
 use std::any::Any;
 use std::path::Path;
 
-use crate::error::IndexError;
-use crate::types::{
+use crate::core_error::IndexError;
+use crate::core_types::{
     CheckType, DetailLevel, Finding, ParseResult, Predicate, ScoredResult, ScoringCandidate,
     SearchResult, Span, TraceOptions, TraceResult, Triple,
 };
@@ -33,7 +33,7 @@ pub trait Parser: Send + Sync {
         source: &str,
         path: &Path,
     ) -> Result<ParseResult<Self::Elem, Self::Rel>, Self::Error>;
-    fn validate(&self, source: &str) -> Vec<crate::types::Diagnostic>;
+    fn validate(&self, source: &str) -> Vec<crate::core_types::Diagnostic>;
 }
 
 pub trait KnowledgeGraph: Send + Sync {

@@ -169,7 +169,7 @@ mod tests {
     use std::sync::LazyLock;
 
     static EVE_VECTOR_INDEX: LazyLock<VectorIndex> = LazyLock::new(|| {
-        use nomograph_core::traits::KnowledgeGraph;
+        use crate::core_traits::KnowledgeGraph;
         let results = crate::graph::tests::parse_all_eve();
         let mut graph = crate::SysmlGraph::new();
         graph.index(results).unwrap();

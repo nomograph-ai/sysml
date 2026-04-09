@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use crate::element::SysmlElement;
 use crate::graph::SysmlGraph;
 use crate::relationship::SysmlRelationship;
-use nomograph_core::traits::KnowledgeGraph;
-use nomograph_core::types::Finding;
+use crate::core_traits::KnowledgeGraph;
+use crate::core_types::Finding;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MetamodelCheck {
@@ -74,7 +74,7 @@ fn check_satisfy_targets(
             match target {
                 Some(e) if is_requirement(e) => None,
                 Some(e) => Some(Finding {
-                    check_type: nomograph_core::types::CheckType::DanglingReferences,
+                    check_type: crate::core_types::CheckType::DanglingReferences,
                     element: r.source.clone(),
                     message: format!(
                         "satisfy target '{}' is {} (expected requirement)",
@@ -100,7 +100,7 @@ fn check_verify_targets(
             match target {
                 Some(e) if is_requirement(e) => None,
                 Some(e) => Some(Finding {
-                    check_type: nomograph_core::types::CheckType::DanglingReferences,
+                    check_type: crate::core_types::CheckType::DanglingReferences,
                     element: r.source.clone(),
                     message: format!(
                         "verify target '{}' is {} (expected requirement)",
@@ -129,7 +129,7 @@ fn check_allocate_layers(
                     let mut findings = Vec::new();
                     if !is_logical_kind(&s.kind) {
                         findings.push(Finding {
-                            check_type: nomograph_core::types::CheckType::DanglingReferences,
+                            check_type: crate::core_types::CheckType::DanglingReferences,
                             element: r.source.clone(),
                             message: format!(
                                 "allocate source '{}' is {} (expected logical element)",
@@ -141,7 +141,7 @@ fn check_allocate_layers(
                     }
                     if !is_physical_kind(&t.kind) {
                         findings.push(Finding {
-                            check_type: nomograph_core::types::CheckType::DanglingReferences,
+                            check_type: crate::core_types::CheckType::DanglingReferences,
                             element: r.target.clone(),
                             message: format!(
                                 "allocate target '{}' is {} (expected physical element)",
@@ -193,7 +193,7 @@ fn check_ports_have_type(elements: &[SysmlElement], rels: &[SysmlRelationship]) 
             !typed_sources.contains(&qname) && !typed_sources.contains(&short)
         })
         .map(|e| Finding {
-            check_type: nomograph_core::types::CheckType::DanglingReferences,
+            check_type: crate::core_types::CheckType::DanglingReferences,
             element: e.qualified_name.clone(),
             message: "port has no TypedBy relationship (missing type definition)".to_string(),
             file_path: e.file_path.clone(),
@@ -223,7 +223,7 @@ fn check_binding_connector_compatibility(
 
             match (src_type, tgt_type) {
                 (Some(st), Some(tt)) if st != tt => Some(Finding {
-                    check_type: nomograph_core::types::CheckType::DanglingReferences,
+                    check_type: crate::core_types::CheckType::DanglingReferences,
                     element: r.source.clone(),
                     message: format!(
                         "binding connector connects incompatible types: '{}' ({}) to '{}' ({})",
@@ -274,7 +274,7 @@ pub fn run_single_metamodel_check(graph: &SysmlGraph, check: &MetamodelCheck) ->
 mod tests {
     use super::*;
     use crate::parser::SysmlParser;
-    use nomograph_core::traits::Parser as NomographParser;
+    use crate::core_traits::Parser as NomographParser;
     use std::path::PathBuf;
 
     fn fixture_dir() -> PathBuf {

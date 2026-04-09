@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use serde::Serialize;
 
-use nomograph_core::traits::KnowledgeGraph;
+use crate::core_traits::KnowledgeGraph;
 
 use crate::element::SysmlElement;
 use crate::graph::SysmlGraph;
@@ -221,7 +221,7 @@ pub fn format_compact(result: &DiffResult) -> Vec<String> {
 mod tests {
     use super::*;
     use crate::graph::SysmlGraph;
-    use nomograph_core::types::ParseResult;
+    use crate::core_types::ParseResult;
     use std::path::PathBuf;
 
     fn make_element(name: &str, kind: &str) -> SysmlElement {
@@ -229,7 +229,7 @@ mod tests {
             qualified_name: name.to_string(),
             kind: kind.to_string(),
             file_path: PathBuf::from("test.sysml"),
-            span: nomograph_core::types::Span {
+            span: crate::core_types::Span {
                 start_line: 0,
                 start_col: 0,
                 end_line: 0,
@@ -248,7 +248,7 @@ mod tests {
             target: target.to_string(),
             kind: kind.to_string(),
             file_path: PathBuf::from("test.sysml"),
-            span: nomograph_core::types::Span {
+            span: crate::core_types::Span {
                 start_line: 0,
                 start_col: 0,
                 end_line: 0,

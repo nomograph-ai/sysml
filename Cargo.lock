@@ -1552,12 +1552,34 @@ dependencies = [
 ]
 
 [[package]]
-name = "nomograph-core"
+name = "nomograph-sysml"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "clap",
+ "nomograph-sysml-core",
+ "rmcp",
+ "schemars",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "nomograph-sysml-core"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "fastembed",
+ "handlebars",
+ "hnsw_rs",
  "serde",
  "serde_json",
  "thiserror 2.0.18",
+ "tree-sitter",
+ "tree-sitter-sysml",
 ]
 
 [[package]]
@@ -2491,39 +2513,6 @@ dependencies = [
  "libc",
  "thiserror 1.0.69",
  "walkdir",
-]
-
-[[package]]
-name = "sysml-cli"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "nomograph-core",
- "rmcp",
- "schemars",
- "serde",
- "serde_json",
- "sysml-core",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "sysml-core"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "fastembed",
- "handlebars",
- "hnsw_rs",
- "nomograph-core",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "tree-sitter",
- "tree-sitter-sysml",
 ]
 
 [[package]]
