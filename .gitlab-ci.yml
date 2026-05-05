@@ -4,7 +4,11 @@ include:
     inputs:
       binary_name: sysml
       project_description: "CLI-native knowledge graph toolkit for SysML v2."
-      audit_allow_failure: false
+      # Two transitive vulns enter via fastembed: paste 1.0.15
+      # (RUSTSEC-2024-0436, unmaintained) and rand 0.9.2
+      # (RUSTSEC-2026-0097, unsound with custom logger). Neither is
+      # liftable until upstream pins update; treat as warning.
+      audit_allow_failure: true
       crates_publish: true
       crates_workspace_packages: "nomograph-sysml-core,nomograph-sysml"
 
