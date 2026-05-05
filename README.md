@@ -167,4 +167,4 @@ MIT -- see [LICENSE](LICENSE)
 ```
 
 ---
-Built by Andrew Dunn, April 2026.
+Part of [Nomograph Labs](https://nomograph.ai).
