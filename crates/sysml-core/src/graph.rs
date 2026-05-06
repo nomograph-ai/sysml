@@ -1435,7 +1435,7 @@ pub(crate) mod tests {
             "cross-file trace should find relationships"
         );
         let files: HashSet<_> = result.hops.iter().map(|h| h.file_path.clone()).collect();
-        assert!(files.len() >= 1, "trace should span at least one file");
+        assert!(!files.is_empty(), "trace should span at least one file");
     }
 
     #[test]
