@@ -1,27 +1,25 @@
-include:
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - component: gitlab.com/nomograph/pipeline/rust-cli@v2.4.6
-    inputs:
-      binary_name: sysml
-      project_description: "CLI-native knowledge graph toolkit for SysML v2."
-      # Two transitive vulns enter via fastembed: paste 1.0.15
-      # (RUSTSEC-2024-0436, unmaintained) and rand 0.9.2
-      # (RUSTSEC-2026-0097, unsound with custom logger). Neither is
-      # liftable until upstream pins update; treat as warning.
-      audit_allow_failure: true
-      crates_publish: true
-      crates_workspace_packages: "nomograph-sysml-core,nomograph-sysml"
-
-stages: [test, build, sign, publish, release]
+# gitlab.com/nomograph/sysml .gitlab-ci.yml
+#
+# Pipeline structure provided by nomograph/pipeline tool-rust@v4.2.0
+# (gates + Rust CLI build/sign/publish/release flow).
 
 default:
   tags: [storr]
-  interruptible: true
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
-      - stuck_or_timeout_failure
+
+include:
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - component: gitlab.com/nomograph/pipeline/tool-rust@v4.2.0
+    inputs:
+      binary_name: sysml
+      project_description: "CLI-native knowledge graph toolkit for SysML v2."
+      crates_publish: true
+      crates_workspace_packages: "nomograph-sysml-core,nomograph-sysml"
+      # paste 1.0.15 (RUSTSEC-2024-0436) and rand 0.9.2
+      # (RUSTSEC-2026-0097) enter transitively via fastembed.
+      # Neither is liftable upstream; deny.toml's [advisories.ignore]
+      # carries the rationale and gates the audit on those specific
+      # IDs only, so audit_allow_failure stays false here.
+      audit_allow_failure: false
 
 variables:
   CARGO_HOME: ${CI_PROJECT_DIR}/.cargo
