@@ -14,4 +14,7 @@ ignore = [
     # via fastembed > tokenizers and quinn-proto. We don't use rand::rng()
     # with a custom logger; pinned upstream with no fix yet.
     "RUSTSEC-2026-0097",
+    # bincode 1.3.x -- transitive via hnsw_rs > nomograph-sysml-core. hnsw_rs
+    # pins bincode 1.3 and hasn't moved to 2.x; not liftable from our side.
+    "RUSTSEC-2025-0141",
 ]
