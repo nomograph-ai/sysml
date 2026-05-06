@@ -12,8 +12,10 @@ CLI-native knowledge graph toolkit for SysML v2. Single binary, dual mode
 
 **Repository**: [gitlab.com/nomograph/sysml](https://gitlab.com/nomograph/sysml)
 
+## What it is
+
 Built on [tree-sitter-sysml](https://gitlab.com/nomograph/tree-sitter-sysml)
-for parsing and inspired by GitLab's [Global Knowledge Graph](https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/gkg/) architecture.
+for parsing and inspired by GitLab's [Global Knowledge Graph](https://handbook.gitlab.com/handbook/engineering/architecture/design-documents/gkg/) architecture. Provides a CLI for parsing, querying, and traversing SysML v2 models, plus an MCP server for AI agent integration.
 
 ## Install
 

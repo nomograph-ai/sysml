@@ -1,0 +1,17 @@
+# cargo-audit configuration
+# https://docs.rs/cargo-audit/latest/cargo_audit/
+#
+# Mirrors deny.toml's [advisories.ignore] list. cargo-audit and cargo-deny
+# are separate tools with separate configs; the deps-scan pipeline gate runs
+# cargo-audit first, then cargo-deny check, so both need the same ignores
+# for transitive vulns we cannot lift upstream.
+
+[advisories]
+ignore = [
+    # paste (unmaintained) -- transitive via fastembed > tokenizers
+    "RUSTSEC-2024-0436",
+    # rand 0.9.2 unsound with custom logger using rand::rng() -- transitive
+    # via fastembed > tokenizers and quinn-proto. We don't use rand::rng()
+    # with a custom logger; pinned upstream with no fix yet.
+    "RUSTSEC-2026-0097",
+]
