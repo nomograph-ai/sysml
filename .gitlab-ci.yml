@@ -20,6 +20,24 @@ include:
       # carries the rationale and gates the audit on those specific
       # IDs only, so audit_allow_failure stays false here.
       audit_allow_failure: false
+  # Fail-closed automerge gate (renovate-architecture L1 verdict
+  # contract): osv-verdict -> CHECK_OSV, cargo-verdict -> CHECK_CARGO
+  # (builds+tests the workspace), automerge-gate blocks unless every
+  # required check is PRESENT and ==pass. The gate job's green/red is
+  # the pipeline status Renovate reads before GitLab native auto-merge.
+  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.3.0
+    inputs:
+      stage: verdict
+  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.3.0
+    inputs:
+      stage: verdict
+      cargo_test_args: "--workspace"
+  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.3.0
+    inputs:
+      stage: gate
+      required-checks: "osv,cargo"
+
+stages: [lint, test, build, sign, publish, release, notify, verdict, gate]
 
 variables:
   CARGO_HOME: ${CI_PROJECT_DIR}/.cargo
