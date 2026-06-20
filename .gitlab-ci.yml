@@ -25,14 +25,14 @@ include:
   # (builds+tests the workspace), automerge-gate blocks unless every
   # required check is PRESENT and ==pass. The gate job's green/red is
   # the pipeline status Renovate reads before GitLab native auto-merge.
-  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.3.0
+  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.3.1
     inputs:
       stage: verdict
-  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.3.0
+  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.3.1
     inputs:
       stage: verdict
       cargo_test_args: "--workspace"
-  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.3.0
+  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.3.1
     inputs:
       stage: gate
       required-checks: "osv,cargo"
