@@ -29,8 +29,7 @@ Initial public release under Nomograph Labs.
 
 **MCP server** (feature-gated: `--features mcp`):
 
-- 15 MCP tools exposing the full knowledge graph over the Model Context Protocol
-- 4 MCP prompts for common MBSE reasoning patterns
+- 10 MCP tools exposing the knowledge graph over the Model Context Protocol
 - 3 server configuration flags
 
 **Knowledge graph**:
