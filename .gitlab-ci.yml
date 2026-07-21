@@ -20,6 +20,14 @@ include:
       # carries the rationale and gates the audit on those specific
       # IDs only, so audit_allow_failure stays false here.
       audit_allow_failure: false
+      # v5.5.0's `check` job defaults to --all-features, which pulls in
+      # sysml-core's `vector` feature -> fastembed -> onnxruntime. The
+      # CI image's prebuilt onnxruntime fails to LINK (rust-lld:
+      # undefined symbol __isoc23_strtoull, a glibc-2.38 symbol absent
+      # from the image). `vector` is optional and not part of the
+      # default shipped build, so it's excluded here. `mcp` (the
+      # feature that actually had a real bug) stays compiled.
+      check_features: "--features nomograph-sysml/mcp"
   # Fail-closed automerge gate (renovate-architecture L1 verdict
   # contract): osv-verdict -> CHECK_OSV, cargo-verdict -> CHECK_CARGO
   # (builds+tests the workspace), automerge-gate blocks unless every
@@ -32,6 +40,10 @@ include:
     inputs:
       stage: verdict
       cargo_test_args: "--workspace"
+      # Same vector/onnxruntime exclusion as tool-rust's check job
+      # above -- keep mcp compiled, keep vector (and its unlinkable
+      # onnxruntime dep) out of CI.
+      check_features: "--features nomograph-sysml/mcp"
   - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.5.0
     inputs:
       stage: gate
