@@ -8,7 +8,7 @@ default:
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - component: gitlab.com/nomograph/pipeline/tool-rust@v5.3.1
+  - component: gitlab.com/nomograph/pipeline/tool-rust@740db2f
     inputs:
       binary_name: sysml
       project_description: "CLI-native knowledge graph toolkit for SysML v2."
@@ -28,7 +28,7 @@ include:
   - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.3.1
     inputs:
       stage: verdict
-  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.3.1
+  - component: gitlab.com/nomograph/pipeline/cargo-verdict@740db2f
     inputs:
       stage: verdict
       cargo_test_args: "--workspace"

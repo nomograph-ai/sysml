@@ -206,7 +206,7 @@ fn parse_check_type(s: &str) -> Option<CheckType> {
 #[tool_router]
 impl NomographServer {
     #[tool(description = "Build a knowledge graph index from SysML v2 files. Run this before using other tools.")]
-    async fn sysml_index(&self, Parameters(req): Parameters<IndexRequest>) -> String {
+    async fn sysml_index(&self, #[tool(aggr)] req: IndexRequest) -> String {
         let paths: Vec<PathBuf> = req.paths.iter().map(PathBuf::from).collect();
         let sysml_files = collect_sysml_files(&paths);
 
