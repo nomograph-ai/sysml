@@ -41,3 +41,20 @@ stages: [lint, test, build, sign, publish, release, notify, verdict, gate]
 
 variables:
   CARGO_HOME: ${CI_PROJECT_DIR}/.cargo
+
+# PROBE-ONLY override, not part of the real repoint under test: pipeline
+# 740db2f hardcodes rust-cli:v5.5.0, but that tag was never published
+# (retag:rust-cli only fires on a real `git tag v5.5.0` push, which
+# hasn't happened yet) -- registry 404s "manifest unknown" on both
+# branches identically before either job's script runs. containers/
+# rust-cli.Containerfile is byte-identical between v5.4.2 and 740db2f
+# (confirmed via the pipeline repo's compare API, and rust-cli:latest's
+# digest == rust-cli:v5.4.2's digest), so :latest is a functionally
+# equivalent stand-in for the missing tag. This does not touch the
+# --all-features wiring under test, which lives entirely in tool-rust.yml
+# and cargo-verdict.yml's `script:`, not the image.
+check:
+  image: registry.gitlab.com/nomograph/pipeline/rust-cli:latest
+
+cargo-verdict:
+  image: registry.gitlab.com/nomograph/pipeline/rust-cli:latest
