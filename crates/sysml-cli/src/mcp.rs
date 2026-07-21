@@ -1,8 +1,9 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
+use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::{Implementation, ServerCapabilities, ServerInfo};
-use rmcp::{schemars, tool, ServerHandler, ServiceExt};
+use rmcp::{schemars, tool, tool_handler, tool_router, ServerHandler, ServiceExt};
 use serde::Deserialize;
 use tokio::sync::Mutex;
 
@@ -202,10 +203,10 @@ fn parse_check_type(s: &str) -> Option<CheckType> {
     }
 }
 
-#[tool(tool_box)]
+#[tool_router]
 impl NomographServer {
     #[tool(description = "Build a knowledge graph index from SysML v2 files. Run this before using other tools.")]
-    async fn sysml_index(&self, #[tool(aggr)] req: IndexRequest) -> String {
+    async fn sysml_index(&self, Parameters(req): Parameters<IndexRequest>) -> String {
         let paths: Vec<PathBuf> = req.paths.iter().map(PathBuf::from).collect();
         let sysml_files = collect_sysml_files(&paths);
 
@@ -261,7 +262,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Search the knowledge graph for elements by name, kind, or natural language query")]
-    async fn sysml_search(&self, #[tool(aggr)] req: SearchRequest) -> String {
+    async fn sysml_search(&self, Parameters(req): Parameters<SearchRequest>) -> String {
         if let Err(e) = self.ensure_graph().await {
             return Self::err_json(&e);
         }
@@ -298,7 +299,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Trace relationship chains from an element through the knowledge graph")]
-    async fn sysml_trace(&self, #[tool(aggr)] req: TraceRequest) -> String {
+    async fn sysml_trace(&self, Parameters(req): Parameters<TraceRequest>) -> String {
         if let Err(e) = self.ensure_graph().await {
             return Self::err_json(&e);
         }
@@ -370,7 +371,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Run structural completeness and metamodel conformance checks on the model")]
-    async fn sysml_check(&self, #[tool(aggr)] req: CheckRequest) -> String {
+    async fn sysml_check(&self, Parameters(req): Parameters<CheckRequest>) -> String {
         if let Err(e) = self.ensure_graph().await {
             return Self::err_json(&e);
         }
@@ -456,7 +457,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Query relationships by predicate: filter by source/target kind, name, and relationship type")]
-    async fn sysml_query(&self, #[tool(aggr)] req: QueryRequest) -> String {
+    async fn sysml_query(&self, Parameters(req): Parameters<QueryRequest>) -> String {
         if let Err(e) = self.ensure_graph().await {
             return Self::err_json(&e);
         }
@@ -515,7 +516,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Render a pre-formatted report from the knowledge graph. Returns markdown/html/csv, not JSON. Use for synthesis tasks.")]
-    async fn sysml_render(&self, #[tool(aggr)] req: RenderRequest) -> String {
+    async fn sysml_render(&self, Parameters(req): Parameters<RenderRequest>) -> String {
         if let Err(e) = self.ensure_graph().await {
             return Self::err_json(&e);
         }
@@ -550,7 +551,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Read the contents of a file. Use this to examine SysML source files, configuration files, or any text file in the workspace.")]
-    async fn read_file(&self, #[tool(aggr)] req: ReadFileRequest) -> String {
+    async fn read_file(&self, Parameters(req): Parameters<ReadFileRequest>) -> String {
         let path = PathBuf::from(&req.path);
         if !path.exists() {
             return Self::err_json(&format!("File not found: {}", req.path));
@@ -584,7 +585,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Validate SysML v2 files for syntax errors. Returns diagnostics for each file.")]
-    async fn sysml_validate(&self, #[tool(aggr)] req: ValidateRequest) -> String {
+    async fn sysml_validate(&self, Parameters(req): Parameters<ValidateRequest>) -> String {
         let paths: Vec<PathBuf> = req.paths.iter().map(PathBuf::from).collect();
         let sysml_files = collect_sysml_files(&paths);
 
@@ -648,7 +649,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Inspect an element by exact name. Returns full metadata: kind, layer, members, and all incoming/outgoing relationships. Use for element detail lookups.")]
-    async fn sysml_inspect(&self, #[tool(aggr)] req: InspectRequest) -> String {
+    async fn sysml_inspect(&self, Parameters(req): Parameters<InspectRequest>) -> String {
         if let Err(e) = self.ensure_graph().await {
             return Self::err_json(&e);
         }
@@ -663,7 +664,7 @@ impl NomographServer {
     }
 
     #[tool(description = "Show model health dashboard: element/relationship counts, type breakdown, completeness score")]
-    async fn sysml_stat(&self, #[tool(aggr)] _req: StatRequest) -> String {
+    async fn sysml_stat(&self, Parameters(_req): Parameters<StatRequest>) -> String {
         if let Err(e) = self.ensure_graph().await {
             return Self::err_json(&e);
         }
@@ -761,24 +762,18 @@ impl NomographServer {
     }
 }
 
-#[tool(tool_box)]
+#[tool_handler]
 impl ServerHandler for NomographServer {
     fn get_info(&self) -> ServerInfo {
-        ServerInfo {
-            protocol_version: Default::default(),
-            capabilities: ServerCapabilities::builder()
-                .enable_tools()
-                .build(),
-            server_info: Implementation {
-                name: "nomograph-sysml".to_string(),
-                version: env!("CARGO_PKG_VERSION").to_string(),
-            },
-            instructions: Some(
+        ServerInfo::new(ServerCapabilities::builder().enable_tools().build())
+            .with_server_info(Implementation::new(
+                "nomograph-sysml",
+                env!("CARGO_PKG_VERSION"),
+            ))
+            .with_instructions(
                 "SysML v2 knowledge graph toolkit. Index, search, trace, check, query, and render SysML v2 models. \
-                 Start with sysml_index to build the knowledge graph, then use other tools to explore it."
-                    .to_string(),
-            ),
-        }
+                 Start with sysml_index to build the knowledge graph, then use other tools to explore it.",
+            )
     }
 }
 
