@@ -450,7 +450,7 @@ fn build_completeness_context(graph: &SysmlGraph) -> CompletenessContext {
             count,
         })
         .collect();
-    type_breakdown.sort_by(|a, b| b.count.cmp(&a.count));
+    type_breakdown.sort_by_key(|b| std::cmp::Reverse(b.count));
 
     CompletenessContext {
         files: graph.file_count(),
