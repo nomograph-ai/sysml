@@ -206,7 +206,7 @@ mod tests {
     #[test]
     fn test_vector_index_build() {
         let vi = &*EVE_VECTOR_INDEX;
-        assert!(vi.embeddings.len() > 0);
+        assert!(!vi.embeddings.is_empty());
         assert_eq!(vi.embeddings.len(), vi.element_ids.len());
         for emb in vi.embeddings.iter() {
             assert_eq!(emb.len(), 384);

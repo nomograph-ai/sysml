@@ -1563,13 +1563,13 @@ fn run_stat(args: StatArgs, format: &OutputFormat) -> i32 {
     };
 
     let mut sorted_breakdown: Vec<_> = type_breakdown.into_iter().collect();
-    sorted_breakdown.sort_by(|a, b| b.1.cmp(&a.1));
+    sorted_breakdown.sort_by_key(|b| std::cmp::Reverse(b.1));
 
     let mut sorted_layers: Vec<_> = layer_breakdown.into_iter().collect();
-    sorted_layers.sort_by(|a, b| b.1.cmp(&a.1));
+    sorted_layers.sort_by_key(|b| std::cmp::Reverse(b.1));
 
     let mut sorted_rels: Vec<_> = rel_breakdown.into_iter().collect();
-    sorted_rels.sort_by(|a, b| b.1.cmp(&a.1));
+    sorted_rels.sort_by_key(|b| std::cmp::Reverse(b.1));
 
     let output = serde_json::json!({
         "files": file_count,
