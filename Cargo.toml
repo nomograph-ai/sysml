@@ -17,7 +17,7 @@ keywords = ["sysml", "systems-engineering", "knowledge-graph", "mbse", "tree-sit
 categories = ["command-line-utilities", "parser-implementations"]
 
 [workspace.dependencies]
-tree-sitter = "0.24"
+tree-sitter = "0.26"
 tree-sitter-sysml = "0.1.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
