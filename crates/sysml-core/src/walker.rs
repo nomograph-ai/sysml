@@ -33,7 +33,7 @@ fn strip_quotes(s: &str) -> &str {
 
 fn extract_element_name(node: &Node, source: &str) -> Option<String> {
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if child.kind() == "identification" {
                 return find_name_in_identification(&child, source);
             }
@@ -41,10 +41,10 @@ fn extract_element_name(node: &Node, source: &str) -> Option<String> {
     }
 
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if child.kind() == "usage_declaration" {
                 for j in 0..child.child_count() {
-                    if let Some(gc) = child.child(j) {
+                    if let Some(gc) = child.child(j as u32) {
                         if gc.kind() == "identification" {
                             return find_name_in_identification(&gc, source);
                         }
@@ -70,7 +70,7 @@ fn extract_element_name(node: &Node, source: &str) -> Option<String> {
 
 fn find_name_in_identification(node: &Node, source: &str) -> Option<String> {
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if child.kind() == "name" {
                 return child
                     .utf8_text(source.as_bytes())
@@ -92,7 +92,7 @@ fn extract_typed_by(node: &Node, source: &str) -> Option<String> {
 fn extract_qualified_name_text(node: &Node, source: &str) -> Option<String> {
     let mut parts = Vec::new();
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if child.kind() == "name" {
                 if let Ok(text) = child.utf8_text(source.as_bytes()) {
                     parts.push(strip_quotes(text).to_string());
@@ -109,7 +109,7 @@ fn extract_qualified_name_text(node: &Node, source: &str) -> Option<String> {
 
 fn find_child_by_kind<'a>(node: &Node<'a>, kind: &str) -> Option<Node<'a>> {
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if child.kind() == kind {
                 return Some(child);
             }
@@ -120,7 +120,7 @@ fn find_child_by_kind<'a>(node: &Node<'a>, kind: &str) -> Option<Node<'a>> {
 
 fn extract_doc_comment(body_node: &Node, source: &str) -> Option<String> {
     for i in 0..body_node.child_count() {
-        if let Some(child) = body_node.child(i) {
+        if let Some(child) = body_node.child(i as u32) {
             if child.kind() == "documentation" {
                 if let Some(comment_body) = find_child_by_kind(&child, "block_comment_body") {
                     if let Ok(text) = comment_body.utf8_text(source.as_bytes()) {
@@ -155,7 +155,7 @@ fn clean_doc_comment(text: &str) -> String {
 
 fn find_body_child<'a>(node: &Node<'a>) -> Option<Node<'a>> {
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if is_body_node(child.kind()) {
                 return Some(child);
             }
@@ -167,7 +167,7 @@ fn find_body_child<'a>(node: &Node<'a>) -> Option<Node<'a>> {
 fn extract_feature_chain_text(node: &Node, source: &str) -> Option<String> {
     let mut parts = Vec::new();
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if child.kind() == "name" {
                 if let Ok(text) = child.utf8_text(source.as_bytes()) {
                     parts.push(strip_quotes(text).to_string());
@@ -185,7 +185,7 @@ fn extract_feature_chain_text(node: &Node, source: &str) -> Option<String> {
 fn find_children_by_kind<'a>(node: &Node<'a>, kind: &str) -> Vec<Node<'a>> {
     let mut result = Vec::new();
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if child.kind() == kind {
                 result.push(child);
             }
@@ -196,7 +196,7 @@ fn find_children_by_kind<'a>(node: &Node<'a>, kind: &str) -> Vec<Node<'a>> {
 
 fn extract_binding_value_text(node: &Node, source: &str) -> Option<String> {
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             if child.is_named() {
                 if let Some(fce) = find_child_by_kind(&child, "qualified_name") {
                     return extract_qualified_name_text(&fce, source);
@@ -413,7 +413,7 @@ impl<'a> Walker<'a> {
 
     pub fn walk_root(&mut self, root: Node<'a>) {
         for i in 0..root.child_count() {
-            if let Some(child) = root.child(i) {
+            if let Some(child) = root.child(i as u32) {
                 if child.is_named() {
                     self.walk_node(child);
                 }
@@ -495,7 +495,7 @@ impl<'a> Walker<'a> {
         if let Some(body) = find_body_child(&node) {
             self.extract_body_relationships(&body, &qname);
             for i in 0..body.child_count() {
-                if let Some(child) = body.child(i) {
+                if let Some(child) = body.child(i as u32) {
                     if child.is_named() {
                         self.walk_node(child);
                     }
@@ -509,7 +509,7 @@ impl<'a> Walker<'a> {
     fn collect_member_names(&self, body: &Node, parent_qname: &str) -> Vec<String> {
         let mut names = Vec::new();
         for i in 0..body.child_count() {
-            if let Some(child) = body.child(i) {
+            if let Some(child) = body.child(i as u32) {
                 if is_element_node(child.kind()) {
                     if let Some(name) = extract_element_name(&child, self.source) {
                         names.push(format!("{}::{}", parent_qname, name));
@@ -607,7 +607,7 @@ impl<'a> Walker<'a> {
 
     fn extract_body_relationships(&mut self, body: &Node, context_qname: &str) {
         for i in 0..body.child_count() {
-            if let Some(child) = body.child(i) {
+            if let Some(child) = body.child(i as u32) {
                 if !child.is_named() {
                     continue;
                 }
@@ -921,7 +921,7 @@ impl<'a> Walker<'a> {
             RelationshipKind::Assert => {
                 let mut found_nested = false;
                 for i in 0..node.child_count() {
-                    if let Some(child) = node.child(i) {
+                    if let Some(child) = node.child(i as u32) {
                         let ck = child.kind();
                         if ck == "satisfy_statement" {
                             self.extract_relationship(
@@ -1007,7 +1007,7 @@ impl<'a> Walker<'a> {
 
     fn extract_nested_allocates(&mut self, node: &Node, context_qname: &str) {
         for i in 0..node.child_count() {
-            if let Some(child) = node.child(i) {
+            if let Some(child) = node.child(i as u32) {
                 if child.kind() == "allocate_statement" {
                     self.extract_relationship(&child, RelationshipKind::Allocate, context_qname);
                     self.extract_nested_allocates(&child, context_qname);
@@ -1053,7 +1053,7 @@ pub fn collect_parse_errors(node: Node, source: &str, diagnostics: &mut Vec<Diag
     }
 
     for i in 0..node.child_count() {
-        if let Some(child) = node.child(i) {
+        if let Some(child) = node.child(i as u32) {
             collect_parse_errors(child, source, diagnostics);
         }
     }
