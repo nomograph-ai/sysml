@@ -8,7 +8,7 @@ default:
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - component: gitlab.com/nomograph/pipeline/tool-rust@v5.6.0
+  - component: gitlab.com/nomograph/pipeline/tool-rust@v5.7.0
     inputs:
       binary_name: sysml
       project_description: "CLI-native knowledge graph toolkit for SysML v2."
@@ -33,10 +33,10 @@ include:
   # (builds+tests the workspace), automerge-gate blocks unless every
   # required check is PRESENT and ==pass. The gate job's green/red is
   # the pipeline status Renovate reads before GitLab native auto-merge.
-  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.6.0
+  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.7.0
     inputs:
       stage: verdict
-  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.6.0
+  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.7.0
     inputs:
       stage: verdict
       cargo_test_args: "--workspace"
@@ -44,7 +44,7 @@ include:
       # above -- keep mcp compiled, keep vector (and its unlinkable
       # onnxruntime dep) out of CI.
       check_features: "--features nomograph-sysml/mcp"
-  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.6.0
+  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.7.0
     inputs:
       stage: gate
       required-checks: "osv,cargo"
