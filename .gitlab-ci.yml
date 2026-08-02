@@ -7,7 +7,6 @@ default:
   tags: [storr]
 
 include:
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
   - component: gitlab.com/nomograph/pipeline/tool-rust@v5.7.0
     inputs:
       binary_name: sysml
@@ -33,10 +32,31 @@ include:
   # (builds+tests the workspace), automerge-gate blocks unless every
   # required check is PRESENT and ==pass. The gate job's green/red is
   # the pipeline status Renovate reads before GitLab native auto-merge.
-  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.7.0
+
+  # Secret detection that BLOCKS, replacing the upstream
+  # Jobs/Secret-Detection.gitlab-ci.yml template. That template cannot
+  # fail a pipeline on a leaked credential: its analyzer invokes gitleaks
+  # with --exit-code 0, so the process exits 0 even when it found
+  # secrets, and flipping allow_failure only makes OPERATIONAL faults
+  # blocking. secret-verdict runs the same analyzer with the same ruleset
+  # (identical scan surface -- this is a swap of the include:, not a
+  # change in what gets flagged), then parses
+  # gl-secret-detection-report.json, exits nonzero on a non-empty
+  # vulnerabilities array, and fails closed when the report is absent.
+  # The verdict trio moves to @v5.10.0 together with secret-verdict, not
+  # opportunistically: automerge-gate's secret_job needs-slot (how
+  # CHECK_SECRET reaches the gate) exists only from v5.10.0, and the
+  # v5.10.0 gate carries the bare-branch rule clause that osv-verdict and
+  # cargo-verdict gained in 5.8.0/5.9.1 -- bumping the gate alone would
+  # instantiate it on branch pushes where the older verdicts still do not
+  # run, and it would block fail-closed on absent CHECK_OSV/CHECK_CARGO.
+  - component: gitlab.com/nomograph/pipeline/secret-verdict@v5.10.0
     inputs:
       stage: verdict
-  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.7.0
+  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.10.0
+    inputs:
+      stage: verdict
+  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.10.0
     inputs:
       stage: verdict
       cargo_test_args: "--workspace"
@@ -44,10 +64,10 @@ include:
       # above -- keep mcp compiled, keep vector (and its unlinkable
       # onnxruntime dep) out of CI.
       check_features: "--features nomograph-sysml/mcp"
-  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.7.0
+  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.10.0
     inputs:
       stage: gate
-      required-checks: "osv,cargo"
+      required-checks: "osv,cargo,secret"
 
 stages: [lint, test, build, sign, publish, release, notify, verdict, gate]
 
