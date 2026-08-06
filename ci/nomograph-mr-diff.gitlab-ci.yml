@@ -19,7 +19,7 @@ variables:
   NOMOGRAPH_DIFF_COMPACT: "true"
 
 .nomograph-base:
-  image: rust:latest@sha256:74182bc004bb9be325def279d21c72808917d6e4fb7d8651ecdb58d3205d88d2
+  image: rust:latest@sha256:3382bd20aa942806c533e9a73cd000474fb3ef173f71e684cc9b942675781769
   before_script:
     - command -v ${NOMOGRAPH_BINARY} >/dev/null 2>&1 || cargo install nomograph-sysml
 
