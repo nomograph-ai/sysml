@@ -7,7 +7,7 @@ default:
   tags: [storr]
 
 include:
-  - component: gitlab.com/nomograph/pipeline/tool-rust@v5.12.0
+  - component: gitlab.com/nomograph/pipeline/tool-rust@v5.13.0
     inputs:
       binary_name: sysml
       project_description: "CLI-native knowledge graph toolkit for SysML v2."
@@ -50,13 +50,13 @@ include:
   # cargo-verdict gained in 5.8.0/5.9.1 -- bumping the gate alone would
   # instantiate it on branch pushes where the older verdicts still do not
   # run, and it would block fail-closed on absent CHECK_OSV/CHECK_CARGO.
-  - component: gitlab.com/nomograph/pipeline/secret-verdict@v5.12.0
+  - component: gitlab.com/nomograph/pipeline/secret-verdict@v5.13.0
     inputs:
       stage: verdict
-  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.12.0
+  - component: gitlab.com/nomograph/pipeline/osv-verdict@v5.13.0
     inputs:
       stage: verdict
-  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.12.0
+  - component: gitlab.com/nomograph/pipeline/cargo-verdict@v5.13.0
     inputs:
       stage: verdict
       cargo_test_args: "--workspace"
@@ -64,7 +64,7 @@ include:
       # above -- keep mcp compiled, keep vector (and its unlinkable
       # onnxruntime dep) out of CI.
       check_features: "--features nomograph-sysml/mcp"
-  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.12.0
+  - component: gitlab.com/nomograph/pipeline/automerge-gate@v5.13.0
     inputs:
       stage: gate
       required-checks: "osv,cargo,secret"
