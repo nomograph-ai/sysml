@@ -30,6 +30,6 @@ handlebars = "6"
 rmcp = { version = "3.0", features = ["server", "transport-io"] }
 schemars = "1.0"
 tokio = { version = "1", features = ["full"] }
-fastembed = { version = "5.12", default-features = false, features = ["hf-hub-native-tls", "ort-download-binaries-native-tls"] }
+fastembed = { version = "6.0", default-features = false, features = ["hf-hub-native-tls", "ort-download-binaries-native-tls"] }
 hnsw_rs = "0.3"
 sysml-core = { path = "crates/sysml-core", version = "0.2.0", package = "nomograph-sysml-core" }
