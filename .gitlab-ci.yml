@@ -4,7 +4,7 @@
 # (gates + Rust CLI build/sign/publish/release flow).
 
 default:
-  tags: [storr]
+  tags: [anvil]
 
 include:
   - component: gitlab.com/nomograph/pipeline/tool-rust@v5.14.1
