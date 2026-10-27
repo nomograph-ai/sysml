@@ -31,7 +31,7 @@ stages:
   - analyze
 
 .nomograph-base:
-  image: rust:latest@sha256:a8a5f0a1e5fe7dfe1d352591e4a1c7dd2c08fd70475cae872cf3458ba0df0546
+  image: rust:latest@sha256:931c2c0531a8b143e044f0f3914dfe802f15bb3d1955f0b657e9359327ac2ffc
   before_script:
     - command -v ${NOMOGRAPH_BINARY} >/dev/null 2>&1 || cargo install nomograph-sysml
 
