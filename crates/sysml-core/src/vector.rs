@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
+use fastembed::{EmbeddingModel, TextInitOptions, TextEmbedding};
 use hnsw_rs::prelude::*;
 
 use crate::element::SysmlElement;
@@ -31,7 +31,7 @@ impl Clone for VectorIndex {
 
 fn load_model() -> Result<TextEmbedding, String> {
     TextEmbedding::try_new(
-        InitOptions::new(EmbeddingModel::AllMiniLML6V2).with_show_download_progress(false),
+        TextInitOptions::new(EmbeddingModel::AllMiniLML6V2).with_show_download_progress(false),
     )
     .map_err(|e| format!("Failed to load embedding model: {e}"))
 }
