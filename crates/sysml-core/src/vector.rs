@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-use fastembed::{EmbeddingModel, TextInitOptions, TextEmbedding};
+use fastembed::{EmbeddingModel, TextEmbedding, TextInitOptions};
 use hnsw_rs::prelude::*;
 
 use crate::element::SysmlElement;
